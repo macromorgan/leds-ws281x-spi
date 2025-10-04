@@ -11,6 +11,7 @@
  *
  */
 
+#include <linux/delay.h>
 #include <linux/led-class-multicolor.h>
 #include <linux/leds.h>
 #include <linux/module.h>
@@ -149,6 +150,12 @@ static int ws281x_write(struct ws281x_array *ws281x)
 		dev_err(ws281x->dev, "spi transfer error: %d", ret);
 		return ret;
 	}
+
+	/*
+	 * Sleep for at least 50us so the hardware knows this is the
+	 * end of a transfer.
+	 */
+	usleep_range(50, 200);
 
 	return 0;
 }
